@@ -1,4 +1,8 @@
 node_modules/
 dist/
+dev-dist/
 .env*
 .claude/settings.local.json
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
