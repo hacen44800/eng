@@ -1,0 +1,17 @@
+[
+  { "id": "l-a1-01", "level": "A1", "kind": "mcq", "audio": "My name is Sam. I work in a small IT company.", "question": "Where does Sam work?", "choices": ["In a bank", "In a small IT company", "In a school", "At home"], "answer": 1, "explanation": "« I work in a small IT company »." },
+  { "id": "l-a1-02", "level": "A1", "kind": "mcq", "audio": "The meeting is at ten o'clock in room four.", "question": "When is the meeting?", "choices": ["At ten o'clock", "At four o'clock", "At two o'clock", "At eleven o'clock"], "answer": 0, "explanation": "« at ten o'clock » ; « four » est le numéro de la salle." },
+  { "id": "l-a1-03", "level": "A1", "kind": "dictation", "audio": "I start work at nine." },
+
+  { "id": "l-a2-01", "level": "A2", "kind": "mcq", "audio": "Yesterday the server crashed, so we worked late to fix it.", "question": "Why did they work late?", "choices": ["They had a meeting", "They had a deadline", "The server crashed", "The client called"], "answer": 2, "explanation": "« the server crashed, so we worked late »." },
+  { "id": "l-a2-02", "level": "A2", "kind": "mcq", "audio": "I'm going to take a day off on Friday because my brother is getting married.", "question": "What is happening on Friday?", "choices": ["A release", "A wedding", "A job interview", "A training"], "answer": 1, "explanation": "« my brother is getting married » = un mariage." },
+  { "id": "l-a2-03", "level": "A2", "kind": "dictation", "audio": "We released the new version last week." },
+
+  { "id": "l-b1-01", "level": "B1", "kind": "mcq", "audio": "We've been having performance issues since the last update, so we've decided to roll it back until we find the cause.", "question": "What did the team decide?", "choices": ["To buy new servers", "To ignore the issue", "To release another update", "To undo the last update"], "answer": 3, "explanation": "« roll it back » = revenir à la version précédente." },
+  { "id": "l-b1-02", "level": "B1", "kind": "mcq", "audio": "If the client approves the design by Thursday, we'll be able to start development next Monday.", "question": "What must happen first?", "choices": ["The client must approve the design", "Development must start", "The team must hire a designer", "The design must be cancelled"], "answer": 0, "explanation": "Condition : « If the client approves the design by Thursday »." },
+  { "id": "l-b1-03", "level": "B1", "kind": "dictation", "audio": "Have you already pushed your changes to the main branch?" },
+
+  { "id": "l-b2-01", "level": "B2", "kind": "mcq", "audio": "Although the migration went smoothly overall, a handful of users reported that their settings had been reset, which we're still looking into.", "question": "What is still being investigated?", "choices": ["Why the migration failed", "Why some users lost their settings", "Why the migration was slow", "Why users stopped using the app"], "answer": 1, "explanation": "« their settings had been reset, which we're still looking into »." },
+  { "id": "l-b2-02", "level": "B2", "kind": "mcq", "audio": "Had we been told about the API changes earlier, we wouldn't have had to rewrite half of the integration at the last minute.", "question": "What does the speaker regret?", "choices": ["Rewriting the API", "Changing the API", "Not being informed earlier", "Finishing too early"], "answer": 2, "explanation": "« Had we been told earlier » = si on nous avait prévenus plus tôt." },
+  { "id": "l-b2-03", "level": "B2", "kind": "dictation", "audio": "We should have been warned about the outage before it affected our customers." }
+]

@@ -1,0 +1,10 @@
+[
+  { "id": "s-a1-01", "level": "A1", "text": "I work in a team." },
+  { "id": "s-a1-02", "level": "A1", "text": "My computer is very slow." },
+  { "id": "s-a2-01", "level": "A2", "text": "Yesterday I fixed a bug in the login page." },
+  { "id": "s-a2-02", "level": "A2", "text": "We are going to deploy the new version on Friday." },
+  { "id": "s-b1-01", "level": "B1", "text": "I've been working on this project since the beginning of the year." },
+  { "id": "s-b1-02", "level": "B1", "text": "If the tests pass, we will merge the changes into the main branch tonight." },
+  { "id": "s-b2-01", "level": "B2", "text": "If we had migrated the database earlier, we wouldn't have run into these performance issues." },
+  { "id": "s-b2-02", "level": "B2", "text": "Although the architecture is quite complex, it allows us to scale each service independently." }
+]
