@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/events/{eventId} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.id == eventId
+        && request.resource.data.keys().hasOnly(['id', 'type', 'payload', 'createdAt', 'deviceId'])
+        && request.resource.data.type is string
+        && request.resource.data.createdAt is int;
+      allow update, delete: if false;
+    }
+  }
+}
