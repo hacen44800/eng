@@ -122,7 +122,7 @@ Le branchement d'un LLM est une exigence d'architecture, pas une option à déci
 
 ### Modèle de données : journal d'événements
 Chaque action d'apprentissage est un événement immuable ajouté à `users/{uid}/events/{eventId}` :
-`{ id, type, payload, createdAt, deviceId }`, avec `type` parmi `placement_answer`, `card_review`, `lesson_done`, `production_graded`, `gate_attempt`, et `id` un UUID généré côté client.
+`{ id, type, payload, createdAt, deviceId }`, avec `type` parmi `placement_answer`, `placement_completed`, `card_review`, `lesson_done`, `production_graded`, `gate_attempt`, et `id` un UUID généré côté client.
 
 L'état (planning des cartes, level courant, niveau par compétence) est **recalculé** dans `core` à partir du journal, en rejouant les événements triés par `createdAt`. Conséquences :
 - Pas de conflit PC ↔ téléphone : les deux appareils ne font qu'ajouter des événements, la synchro est une union.
