@@ -3,10 +3,12 @@ import type { SpeakingItem } from '../../content/schemas';
 import type { Speech } from '../../speech/browserSpeech';
 import { wordAccuracy } from '../../core/textScore';
 import { PASS_ACCURACY } from './ListeningStep';
+import { ARM_DELAY_MS, useArmed } from './useArmed';
 
-type Props = { item: SpeakingItem; speech: Speech; onAnswer: (correct: boolean) => void };
+type Props = { item: SpeakingItem; speech: Speech; onAnswer: (correct: boolean) => void; armDelayMs?: number };
 
-export default function SpeakingStep({ item, speech, onAnswer }: Props) {
+export default function SpeakingStep({ item, speech, onAnswer, armDelayMs = ARM_DELAY_MS }: Props) {
+  const armed = useArmed(armDelayMs);
   const [heard, setHeard] = useState<string | null>(null);
   const [fallback, setFallback] = useState(!speech.canListen);
   const [busy, setBusy] = useState(false);
@@ -32,11 +34,11 @@ export default function SpeakingStep({ item, speech, onAnswer }: Props) {
       {fallback ? (
         <>
           <p className="banner">Micro indisponible : lis la phrase à voix haute, puis évalue-toi honnêtement.</p>
-          <button onClick={() => onAnswer(true)}>Je l'ai bien dit</button>{' '}
-          <button className="secondary" onClick={() => onAnswer(false)}>J'ai hésité ou buté</button>
+          <button disabled={!armed} onClick={() => onAnswer(true)}>Je l'ai bien dit</button>{' '}
+          <button className="secondary" disabled={!armed} onClick={() => onAnswer(false)}>J'ai hésité ou buté</button>
         </>
       ) : heard === null ? (
-        <button onClick={listen} disabled={busy}>{busy ? 'J\'écoute…' : 'Parler'}</button>
+        <button onClick={listen} disabled={!armed || busy}>{busy ? 'J\'écoute…' : 'Parler'}</button>
       ) : (
         <>
           <p>Entendu : <em>{heard || '(rien)'}</em></p>

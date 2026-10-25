@@ -2,12 +2,14 @@ import { useState } from 'react';
 import type { ListeningItem } from '../../content/schemas';
 import { RATE_BY_LEVEL, type Speech } from '../../speech/browserSpeech';
 import { wordAccuracy } from '../../core/textScore';
+import { ARM_DELAY_MS, useArmed } from './useArmed';
 
 export const PASS_ACCURACY = 0.8;
 
-type Props = { item: ListeningItem; speech: Speech; onAnswer: (correct: boolean) => void };
+type Props = { item: ListeningItem; speech: Speech; onAnswer: (correct: boolean) => void; armDelayMs?: number };
 
-export default function ListeningStep({ item, speech, onAnswer }: Props) {
+export default function ListeningStep({ item, speech, onAnswer, armDelayMs = ARM_DELAY_MS }: Props) {
+  const armed = useArmed(armDelayMs);
   const [picked, setPicked] = useState<number | null>(null);
   const [typed, setTyped] = useState('');
   const [checked, setChecked] = useState(false);
@@ -32,7 +34,7 @@ export default function ListeningStep({ item, speech, onAnswer }: Props) {
           <p>{item.question}</p>
           <div className="choices">
             {item.choices.map((c, i) => (
-              <button key={i} className="secondary" disabled={picked !== null} onClick={() => setPicked(i)}>{c}</button>
+              <button key={i} className="secondary" disabled={!armed || picked !== null} onClick={() => setPicked(i)}>{c}</button>
             ))}
           </div>
         </>
@@ -40,7 +42,7 @@ export default function ListeningStep({ item, speech, onAnswer }: Props) {
         <>
           <p>Écris ce que tu entends :</p>
           <textarea value={typed} onChange={e => setTyped(e.target.value)} disabled={checked} />
-          {!checked && <button disabled={typed.trim() === ''} onClick={() => setChecked(true)}>Valider</button>}
+          {!checked && <button disabled={!armed || typed.trim() === ''} onClick={() => setChecked(true)}>Valider</button>}
         </>
       )}
       {answered && (

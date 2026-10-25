@@ -9,11 +9,11 @@ import ListeningStep from './ListeningStep';
 import WritingStep from './WritingStep';
 import SpeakingStep from './SpeakingStep';
 
-export type PlacementFlowProps = { services: Services; uid: string; events: AppEvent[]; sessionId: string; onDone: () => void };
+export type PlacementFlowProps = { services: Services; uid: string; events: AppEvent[]; sessionId: string; onDone: () => void; armDelayMs?: number };
 
 const STEP_TITLES = { grammar: '1/4 Grammaire et vocabulaire', listening: '2/4 Écoute', writing: '3/4 Écrit', speaking: '4/4 Oral', done: 'Terminé' };
 
-export default function PlacementFlow({ services, uid, events, sessionId, onDone }: PlacementFlowProps) {
+export default function PlacementFlow({ services, uid, events, sessionId, onDone, armDelayMs }: PlacementFlowProps) {
   const { content, store, deviceId, speech, grader } = services;
   const p = useMemo(() => placementProgress(events, sessionId, content), [events, sessionId, content]);
   const append = (e: AppEvent) => store.append(uid, e);
@@ -30,11 +30,11 @@ export default function PlacementFlow({ services, uid, events, sessionId, onDone
     <main>
       <p className="muted">{STEP_TITLES[p.step]}</p>
       {p.step === 'grammar' && p.nextGrammar && (
-        <GrammarStep key={p.nextGrammar.id} item={p.nextGrammar} index={p.grammarHistory.length} total={GRAMMAR_QUESTION_COUNT}
+        <GrammarStep key={p.nextGrammar.id} item={p.nextGrammar} index={p.grammarHistory.length} total={GRAMMAR_QUESTION_COUNT} armDelayMs={armDelayMs}
           onAnswer={answer('grammarVocab', p.nextGrammar.id, p.nextGrammar.level)} />
       )}
       {p.step === 'listening' && p.nextListening && (
-        <ListeningStep key={p.nextListening.id} item={p.nextListening} speech={speech}
+        <ListeningStep key={p.nextListening.id} item={p.nextListening} speech={speech} armDelayMs={armDelayMs}
           onAnswer={answer('listening', p.nextListening.id, p.nextListening.level)} />
       )}
       {p.step === 'writing' && p.nextWriting && (
@@ -43,7 +43,7 @@ export default function PlacementFlow({ services, uid, events, sessionId, onDone
             { context: 'placement', sessionId, skill: 'writing', promptId: p.nextWriting!.id, score }, deviceId))} />
       )}
       {p.step === 'speaking' && p.nextSpeaking && (
-        <SpeakingStep key={p.nextSpeaking.id} item={p.nextSpeaking} speech={speech}
+        <SpeakingStep key={p.nextSpeaking.id} item={p.nextSpeaking} speech={speech} armDelayMs={armDelayMs}
           onAnswer={answer('speaking', p.nextSpeaking.id, p.nextSpeaking.level)} />
       )}
       {p.step === 'done' && (

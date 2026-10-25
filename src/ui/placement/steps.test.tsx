@@ -14,7 +14,7 @@ const grammarItem = { id: 'g1', level: 'A1' as const, prompt: 'I ___ a developer
 
 test('grammaire : bonne réponse → correction affichée puis onAnswer(true) au clic sur Suivant', async () => {
   const onAnswer = vi.fn();
-  render(<GrammarStep item={grammarItem} index={0} total={30} onAnswer={onAnswer} />);
+  render(<GrammarStep item={grammarItem} index={0} total={30} armDelayMs={0} onAnswer={onAnswer} />);
   await userEvent.click(screen.getByRole('button', { name: 'am' }));
   expect(screen.getByText('Avec I : am.')).toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: /suivant/i }));
@@ -23,20 +23,20 @@ test('grammaire : bonne réponse → correction affichée puis onAnswer(true) au
 
 test('grammaire : un seul choix possible (pas de double réponse)', async () => {
   const onAnswer = vi.fn();
-  render(<GrammarStep item={grammarItem} index={0} total={30} onAnswer={onAnswer} />);
+  render(<GrammarStep item={grammarItem} index={0} total={30} armDelayMs={0} onAnswer={onAnswer} />);
   await userEvent.click(screen.getByRole('button', { name: 'is' }));
   expect(screen.getByRole('button', { name: 'am' })).toBeDisabled();
 });
 
 test('écoute sans voix de synthèse → phrase affichée avec avertissement', () => {
-  render(<ListeningStep item={{ id: 'l1', level: 'A1', kind: 'dictation', audio: 'I start work at nine.' }} speech={speech({ canSpeak: false })} onAnswer={vi.fn()} />);
+  render(<ListeningStep item={{ id: 'l1', level: 'A1', kind: 'dictation', audio: 'I start work at nine.' }} speech={speech({ canSpeak: false })} armDelayMs={0} onAnswer={vi.fn()} />);
   expect(screen.getByText(/pas de voix anglaise/i)).toBeInTheDocument();
   expect(screen.getByText('I start work at nine.')).toBeInTheDocument();
 });
 
 test('dictée : texte proche → onAnswer(true)', async () => {
   const onAnswer = vi.fn();
-  render(<ListeningStep item={{ id: 'l1', level: 'A1', kind: 'dictation', audio: 'I start work at nine.' }} speech={speech()} onAnswer={onAnswer} />);
+  render(<ListeningStep item={{ id: 'l1', level: 'A1', kind: 'dictation', audio: 'I start work at nine.' }} speech={speech()} armDelayMs={0} onAnswer={onAnswer} />);
   await userEvent.type(screen.getByRole('textbox'), 'I start work at nine');
   await userEvent.click(screen.getByRole('button', { name: /valider/i }));
   await userEvent.click(screen.getByRole('button', { name: /suivant/i }));
@@ -62,7 +62,7 @@ test('écrit : auto-évaluation → score = critères cochés', async () => {
 
 test('oral : micro refusé → bascule sur l\'auto-évaluation', async () => {
   const onAnswer = vi.fn();
-  render(<SpeakingStep item={{ id: 's1', level: 'A1', text: 'I work in a team.' }} speech={speech({ listen: vi.fn(async () => { throw new Error('not-allowed'); }) })} onAnswer={onAnswer} />);
+  render(<SpeakingStep item={{ id: 's1', level: 'A1', text: 'I work in a team.' }} speech={speech({ listen: vi.fn(async () => { throw new Error('not-allowed'); }) })} armDelayMs={0} onAnswer={onAnswer} />);
   await userEvent.click(screen.getByRole('button', { name: /parler/i }));
   expect(await screen.findByText(/micro indisponible/i)).toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: /je l'ai bien dit/i }));
@@ -71,7 +71,7 @@ test('oral : micro refusé → bascule sur l\'auto-évaluation', async () => {
 
 test('oral : reconnaissance OK → score affiché puis onAnswer selon le seuil', async () => {
   const onAnswer = vi.fn();
-  render(<SpeakingStep item={{ id: 's1', level: 'A1', text: 'I work in a team.' }} speech={speech({ listen: vi.fn(async () => 'I work in team') })} onAnswer={onAnswer} />);
+  render(<SpeakingStep item={{ id: 's1', level: 'A1', text: 'I work in a team.' }} speech={speech({ listen: vi.fn(async () => 'I work in team') })} armDelayMs={0} onAnswer={onAnswer} />);
   await userEvent.click(screen.getByRole('button', { name: /parler/i }));
   expect(await screen.findByText(/80 %/)).toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: /suivant/i }));

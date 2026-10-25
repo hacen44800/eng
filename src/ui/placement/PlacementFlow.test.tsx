@@ -7,8 +7,8 @@ import type { AppEvent } from '../../core/events';
 function setup(events: AppEvent[] = []) {
   const s = createFakeServices();
   const onDone = vi.fn();
-  const view = render(<PlacementFlow services={s} uid="u1" events={events} sessionId="S" onDone={onDone} />);
-  return { s, onDone, rerender: (evts: AppEvent[]) => view.rerender(<PlacementFlow services={s} uid="u1" events={evts} sessionId="S" onDone={onDone} />) };
+  const view = render(<PlacementFlow services={s} uid="u1" events={events} sessionId="S" onDone={onDone} armDelayMs={0} />);
+  return { s, onDone, rerender: (evts: AppEvent[]) => view.rerender(<PlacementFlow services={s} uid="u1" events={evts} sessionId="S" onDone={onDone} armDelayMs={0} />) };
 }
 
 test('répondre à la grammaire écrit un événement placement_answer', async () => {
