@@ -14,6 +14,7 @@ export interface AuthService {
 export interface EventStore {
   /** Ajout sans attente : écrit dans le cache local, synchronisé plus tard. */
   append(uid: string, e: AppEvent): void;
+  /** onError reçoit les erreurs de lecture ET les écritures refusées (mises en file locale). */
   subscribe(uid: string, cb: (events: AppEvent[], pending: boolean) => void, onError: (err: Error) => void): () => void;
   /** Renvoie les événements dont l'écriture avait échoué. */
   flushOutbox(uid: string): void;

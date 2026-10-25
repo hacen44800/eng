@@ -49,3 +49,28 @@ test('connexion impossible → message d\'erreur', async () => {
   await userEvent.click(screen.getByRole('button', { name: /se connecter avec github/i }));
   expect(await screen.findByText(/connexion impossible/i)).toBeInTheDocument();
 });
+
+test('bannière hors ligne : affichée seulement si la synchro reste en attente plus de 2 s', () => {
+  vi.useFakeTimers();
+  try {
+    const s = createFakeServices();
+    render(<App services={s} />);
+    act(() => s.emitUser({ uid: 'u1', name: 'T' }));
+    act(() => s.emitEvents(true));
+    expect(screen.queryByText(/hors ligne/i)).not.toBeInTheDocument();
+    act(() => { vi.advanceTimersByTime(2000); });
+    expect(screen.getByText(/hors ligne/i)).toBeInTheDocument();
+    act(() => s.emitEvents(false));
+    expect(screen.queryByText(/hors ligne/i)).not.toBeInTheDocument();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+test('erreur d\'écriture signalée par le store → bannière visible', () => {
+  const s = createFakeServices();
+  render(<App services={s} />);
+  act(() => s.emitUser({ uid: 'u1', name: 'T' }));
+  act(() => s.emitWriteError(new Error('permission-denied')));
+  expect(screen.getByText(/permission-denied/)).toBeInTheDocument();
+});

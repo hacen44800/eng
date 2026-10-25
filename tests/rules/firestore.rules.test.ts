@@ -50,3 +50,10 @@ test('hors de users/{uid}/events : refusé', async () => {
   const db = env.authenticatedContext('alice').firestore();
   await assertFails(setDoc(doc(db, 'config/x'), { a: 1 }));
 });
+
+test('renvoi identique d\'un événement existant (outbox) : accepté sans modification', async () => {
+  const db = env.authenticatedContext('alice').firestore();
+  await assertSucceeds(setDoc(doc(db, 'users/alice/events/e1'), ev('e1')));
+  await assertSucceeds(setDoc(doc(db, 'users/alice/events/e1'), ev('e1')));
+  await assertFails(setDoc(doc(db, 'users/alice/events/e1'), { ...ev('e1'), createdAt: 2 }));
+});

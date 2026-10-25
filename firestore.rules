@@ -9,7 +9,9 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['id', 'type', 'payload', 'createdAt', 'deviceId'])
         && request.resource.data.type is string
         && request.resource.data.createdAt is int;
-      allow update, delete: if false;
+      // Renvoi identique (rejeu de l'outbox) : accepté, rien ne change. Toute modification réelle est refusée.
+      allow update: if request.auth != null && request.auth.uid == uid && request.resource.data == resource.data;
+      allow delete: if false;
     }
   }
 }

@@ -9,6 +9,8 @@ import PlacementFlow from './ui/placement/PlacementFlow';
 
 type View = { name: 'home' } | { name: 'placement'; sessionId: string };
 
+const OFFLINE_BANNER_DELAY_MS = 2000;
+
 export default function App({ services }: { services: Services }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [events, setEvents] = useState<AppEvent[]>([]);
@@ -28,6 +30,14 @@ export default function App({ services }: { services: Services }) {
     );
   }, [services, user]);
 
+  // Une écriture en attente est normale quelques centaines de ms en ligne : on ne signale que si ça dure.
+  const [showOffline, setShowOffline] = useState(false);
+  useEffect(() => {
+    if (!pending) { setShowOffline(false); return; }
+    const t = setTimeout(() => setShowOffline(true), OFFLINE_BANNER_DELAY_MS);
+    return () => clearTimeout(t);
+  }, [pending]);
+
   const result = useMemo(() => latestPlacementResult(events), [events]);
   const unfinished = useMemo(() => activeSessionId(events), [events]);
 
@@ -36,8 +46,12 @@ export default function App({ services }: { services: Services }) {
 
   return (
     <>
-      {pending && <div className="banner">Hors ligne : tes réponses seront synchronisées au retour du réseau.</div>}
-      {syncError && <div className="banner">Problème de synchronisation : {syncError}</div>}
+      {(showOffline || syncError) && (
+        <div className="toast">
+          {showOffline && <div className="banner">Hors ligne : tes réponses seront synchronisées au retour du réseau.</div>}
+          {syncError && <div className="banner">Problème de synchronisation : {syncError}</div>}
+        </div>
+      )}
       {view.name === 'placement' ? (
         <PlacementFlow
           services={services}

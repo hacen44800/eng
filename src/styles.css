@@ -14,3 +14,4 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .ok { color: var(--ok); } .ko { color: var(--ko); }
 textarea { width: 100%; min-height: 120px; font: inherit; padding: 8px; }
 .banner { padding: 8px 12px; border-radius: 8px; background: #fff3cd; color: #5c4400; margin: 8px 0; }
+.toast { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 608px; margin: 0 auto; z-index: 10; pointer-events: none; }

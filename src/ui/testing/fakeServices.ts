@@ -13,6 +13,7 @@ const tinyContent: PlacementContent = {
 export function createFakeServices(overrides: Partial<Services> = {}) {
   let userCb: (u: User | null) => void = () => {};
   let eventsCb: (events: AppEvent[], pending: boolean) => void = () => {};
+  let errorCb: (err: Error) => void = () => {};
   const events: AppEvent[] = [];
 
   const services: Services = {
@@ -23,7 +24,7 @@ export function createFakeServices(overrides: Partial<Services> = {}) {
     },
     store: {
       append: vi.fn((_uid: string, e: AppEvent) => { events.push(e); eventsCb([...events], false); }),
-      subscribe(_uid, cb) { eventsCb = cb; cb([...events], false); return () => {}; },
+      subscribe(_uid, cb, onError) { eventsCb = cb; errorCb = onError; cb([...events], false); return () => {}; },
       flushOutbox: vi.fn(),
     },
     speech: { canSpeak: true, canListen: true, speak: vi.fn(async () => {}), listen: vi.fn(async () => '') },
@@ -32,5 +33,10 @@ export function createFakeServices(overrides: Partial<Services> = {}) {
     content: tinyContent,
     ...overrides,
   };
-  return Object.assign(services, { emitUser: (u: User | null) => userCb(u), events });
+  return Object.assign(services, {
+    emitUser: (u: User | null) => userCb(u),
+    emitEvents: (pending: boolean) => eventsCb([...events], pending),
+    emitWriteError: (err: Error) => errorCb(err),
+    events,
+  });
 }
